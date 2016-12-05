@@ -31,7 +31,7 @@ export default class WelcomeView extends Component {
 	}
 
 	_jump(firstViewId) {
-		this.props.navigator.push({
+		this.props.navigator.replace({
 		  id: firstViewId
 		});
 	}

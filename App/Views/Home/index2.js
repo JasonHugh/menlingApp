@@ -29,7 +29,6 @@ export default class HomeView extends Component {
 			tabBtnLeft: new Animated.Value(0),
 			tabBtnCurLeft: this.tabBtnNum,
 			tabPage: 1,
-			curId: 0,
 			modalVisible: false,
 			url: 'http://36kr.com/p/5055297.html'
 		}
@@ -40,7 +39,11 @@ export default class HomeView extends Component {
 			let routers = this.props.navigator.getCurrentRoutes();
 			let top = routers[routers.length - 1];
    			if (top.id != 'home') {
-				this.props.navigator.pop();
+   				if (top.id == 'chat') {
+   					this.props.navigator.jumpBack();
+   				}else{
+   					this.props.navigator.pop();
+   				}
    				
    				return true;
    			}
@@ -49,42 +52,40 @@ export default class HomeView extends Component {
 	}
 
 	_renderRowView(rowData) {
+		Date.prototype.Format = function (fmt) {  
+		    var o = {
+		        "M+": this.getMonth() + 1, //月份 
+		        "d+": this.getDate(), //日 
+		        "h+": this.getHours(), //小时 
+		        "m+": this.getMinutes(), //分 
+		        "s+": this.getSeconds(), //秒 
+		        "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
+		        "S": this.getMilliseconds() //毫秒 
+		    };
+		    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+		    for (var k in o)
+		    if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+		    return fmt;
+		}
 	    return (
-	    	<TouchableHighlight underlayColor='#c8c7cc' onPress={()=>{this._onNewsPress(rowData.id)}}>
+	    	<TouchableHighlight underlayColor='#c8c7cc'>
 		    	<View style={styles.newsBox}>
-		    		<Text style={[styles.newsTitle]}>{rowData.title.substr(0,40)}</Text>
-		    		<Text style={[styles.newsTime]}>{rowData.published_at}</Text>
+		    		<Text style={[styles.newsTitle]}>{rowData.content}</Text>
+		    		<Text style={[styles.newsTime]}>{new Date(parseInt(rowData.published_at)*1000).Format("yyyy-MM-dd hh:mm:ss")}</Text>
 		    	</View>
 	    	</TouchableHighlight>
 	    )
 	} 
 
-	async _onNewsPress(id) {
-		this.setState({modalVisible:true,url:'http://36kr.com/p/'+id+'.html'});
-	}
-
 	async _onFetch(page = 1, callback, options) {
-      	if (page === 1) {
-      		try {
-		      	let response = await fetch('http://36kr.com/api/info-flow/main_site/posts?column_id=&per_page=20&');
-		      	let responseJson = await response.json();
-		      	let rows = responseJson.data.items;
-		      	await callback(rows);
-		      	await this.setState({'curId':rows[19].id});
-		    } catch(error) {
-		      console.error(error);
-		    }
-      	}else {
-      		try {
-		      	let response = await fetch('http://36kr.com/api/info-flow/main_site/posts?column_id=&b_id='+this.state.curId+'&per_page=20&');
-		      	let responseJson = await response.json();
-		      	let rows = responseJson.data.items;
-		      	await callback(rows);
-		      	await this.setState({'curId':rows[19].id});
-		    } catch(error) {
-		      console.error(error);
-		    }
-      	}
+  		try {
+	      	let response = await fetch('http://m2.qiushibaike.com/article/list/suggest?page='+page+'&type=refresh&count=30');
+	      	let responseJson = await response.json();
+	      	let rows = responseJson.items;
+	      	await callback(rows);
+	    } catch(error) {
+	      console.error(error);
+	    }
       	
     }
 
@@ -98,7 +99,7 @@ export default class HomeView extends Component {
 			        	<View style={styles.tabBar}>
 				        	<Animated.Text style={[styles.tabActive,{left: this.state.tabBtnLeft}]}
 				        		onPress={() => {}}/>
-			        		<Text style={{position:'absolute',right:30,top:2,color:'#fff'}}>创业资讯</Text>
+		        			<Text style={{position:'absolute',right:30,top:2,color:'#fff'}}>糗事百科</Text>
 			        	</View>
 			        </TouchableWithoutFeedback>
 			    </View>
@@ -106,7 +107,7 @@ export default class HomeView extends Component {
 			     	onPageSelected={this._tabOnPress.bind(this)}
 			    	ref='viewPage'>
 			    	<View>
-				        <View style={[styles.tabPage,{backgroundColor:'#ddd',marginBottom:20}]}>
+				        <View style={[styles.tabPage]}>
 			    			<TouchableOpacity style={{flex:1,backgroundColor:'#0cf'}}
 			    			 	activeOpacity = {0.5}
 			        			onPress={this._pageOnPress.bind(this)}>
@@ -128,7 +129,6 @@ export default class HomeView extends Component {
 					        		</Text>
 					        	</View>
 			        		</TouchableOpacity>
-				        	<Text style={{fontSize:8,backgroundColor:'#ddd',alignSelf:'center',marginTop:10}}>用户反馈邮箱：464147349@qq.com</Text>
 				        </View>
 				    </View>
 			    	<View>
@@ -185,9 +185,15 @@ export default class HomeView extends Component {
 
 	_pageOnPress() {
 		let routers = this.props.navigator.getCurrentRoutes();
-		this.props.navigator.push({
-	  		id: 'chat'
-		});
+		if (routers[1]) {
+			this.props.navigator.jumpForward();
+		}else{
+			this.props.navigator.push({
+		  		id: 'chat'
+			});
+		}
+		
+		
 	}
 
 	_pageOnPress1() {
@@ -269,9 +275,9 @@ const styles = {
     	justifyContent: 'center'
     },
     newsBox: {
-    	height:100,
     	justifyContent:'center',
     	paddingHorizontal: 20,
+    	paddingVertical: 10,
     	borderBottomWidth: 1,
     	borderColor: '#aaa'
     },

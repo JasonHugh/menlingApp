@@ -1,5 +1,7 @@
 package com.menapp.receiver;
 
+import com.menapp.GlobalData;
+
 import com.menapp.MainActivity;
 import com.menapp.service.RingService;
 import com.menapp.R;
@@ -26,6 +28,9 @@ public class CustomReceiver extends BroadcastReceiver {
     try {
         JSONObject json = new JSONObject(intent.getExtras().getString("com.avos.avoscloud.Data"));
         final String message = json.getString("alert");
+        GlobalData.visitor = json.getString("visitor");
+        GlobalData.customer = json.getString("customer");
+        GlobalData.convId = json.getString("conv_id");
         Intent resultIntent = new Intent(AVOSCloud.applicationContext, MainActivity.class);
         resultIntent.putExtra("isRing", 1);  //发送状态给activity关闭ringservice
         PendingIntent pendingIntent =

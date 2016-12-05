@@ -13,29 +13,47 @@ import {
   Alert
 } from 'react-native';
 import NavBar from '../../Components/NavBar'
-import {sendMessage,getMessage} from '../../LeanCloud'
+import {sendMessage,receiveMessage,getConvById} from '../../LeanCloud'
+import PushAndroid from '../../PushAndroid'
 
 export default class ChatView extends Component {
 	constructor(props) {
     super(props);
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => true});
     if (loginState) {
-      let username = loginState.username;
-      //alert(username);
-      //sendMessage(username,'你好','fv');
-      //getMessage(username);
+      this.username = loginState.username;
     }
     this.state = {
-      messages:[['外卖 在敲门啦！',0]],
-      dataSource: ds.cloneWithRows([['外卖 在敲门啦！',0],]),
-      sendMessage: "",
+      messages:[["没人敲门",0]],
+      dataSource: ds.cloneWithRows([["没人敲门",0],]),
+      message: "",
       loaded: true,
       inputTextMarginBottom: 0,   //键盘开启时marginBottom增大
       listHeight: 0,
       listFootY: 0,
     };
-
-
+    //获取visitorID,customer
+    PushAndroid.getVisitorId((msg) => {
+        global.visitor = msg;
+    });
+    PushAndroid.getCustomer((msg) => {
+        if (msg === "") {
+          global.customer = "没人敲门";
+        }else{
+          global.customer = msg + ' 在敲门啦！';
+        }
+        this.setState({messages: [[global.customer,0]]})
+        this.setState({dataSource: ds.cloneWithRows([[global.customer,0],])})
+    });
+    //获取convId,conversation
+    PushAndroid.getConvId((msg) => {
+      if (msg !== "") {
+        getConvById(this.username,msg,this);
+      }
+    });
+    
+    //从leancloud接收消息
+    receiveMessage(this.username,this);
   }
 
   _renderRow(rowData: Array,sectionID: number, rowID: number) {
@@ -50,14 +68,15 @@ export default class ChatView extends Component {
   } 
 
   _sendMessage() {
-    storage.remove({
-          key: 'loginState'
-      });
-  	let message = this.state.sendMessage;
+  	let message = this.state.message;
   	if (message) {
   		this._addMessage([message,1]);
-      //回复textinput初始状态
-      this.setState({sendMessage:''});
+      //发送到leancloud
+      if (this.username && global.visitor) {
+        sendMessage(this.username,message);
+      }
+      //恢复textinput初始状态
+      this.setState({message:''});
   	}
   }
 
@@ -90,8 +109,8 @@ export default class ChatView extends Component {
           <TextInput
             style={styles.sendBox}
             placeholder="点击这里输入文字"
-            onChangeText={(text) => this.setState({sendMessage:text})}
-            value={this.state.sendMessage}
+            onChangeText={(text) => this.setState({message:text})}
+            value={this.state.message}
             onFocus={() => {this.setState({inputTextMarginBottom:280});}}
             onBlur={() => {this.setState({inputTextMarginBottom:0});}}
           />

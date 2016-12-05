@@ -7,30 +7,73 @@ const realtime = new Realtime({
   region: 'cn', 
 });
 
-var conversation = null;
-export function sendMessage(username,message,sendTo) {
+export function sendMessage(username,message) {
+	if (global.conversation) {
+		global.conversation.send(new TextMessage(JSON.stringify({text:message,from:username})))
+		.then(function(message) {
+
+		}).catch(console.error);
+	}else{
+		if (global.visitor) {
+			getConvByUser(username,global.visitor,message);
+		}
+	}
+}
+
+export function receiveMessage(username,chatView) {
 	realtime.createIMClient(username).then(function(user) {
-	  // 创建与Jerry之间的对话
-	  return user.createConversation({
-	    members: [sendTo],
-	    name: username+' & '+sendTo,
-	  });
-	}).then(function(conversation) {
-	  // 发送消息
-	  conversation = conversation.send(new TextMessage(message));
-	}).then(function(message) {
-	  console.log(username+' & '+sendTo, message);
+		user.on('message', function(message, conversation) {
+			message = JSON.parse(message.text);
+			let text = message.text;
+			global.visitor = message.from;
+			chatView.state.messages[chatView.state.messages.length] = [text,2];
+			chatView.setState({dataSource:chatView.state.dataSource.cloneWithRows(chatView.state.messages)});
+		});
+	}).catch(console.error);
+
+}
+
+
+//根据ID获取对话
+export function getConvById(username,conv_id,chatView){
+	realtime.createIMClient(username).then(function(v) {
+		v.getConversation(conv_id).then(function(conversation) {
+		  	global.conversation = conversation
+			getPastMessage(conversation,chatView)
+		}).catch(console.error.bind(console));
 	}).catch(console.error);
 }
 
-export function getMessage(username) {
-	let message = "";
-	realtime.createIMClient(username).then(function(user) {
-	  user.on('message', function(message, conversation) {
-	  	console.log(username, message.text);
-	  });
+//根据用户获取对话,接着发消息
+function getConvByUser(username,visitor,message){
+	realtime.createIMClient(username).then(function(v) {
+		v.getQuery().limit(1).containsMembers([visitor]).find().then(function(conversations) {
+			// 默认按每个对话的最后更新日期（收到最后一条消息的时间）倒序排列
+			global.conversation = conversations[0];
+			global.conversation.send(new TextMessage(JSON.stringify({text:message,from:username})))
+			.then(function(message) {
+
+			}).catch(console.error);
+		}).catch(console.error.bind(console));
 	}).catch(console.error);
-	return message;
+}
+
+//获取过去的消息
+function getPastMessage(conversation,chatView){
+	//收取之前的聊天记录
+	conversation.queryMessages({
+	  	limit: 10, // limit 取值范围 1~1000，默认 20
+	}).then(function(messages) {
+		for (let i = 0, max = messages.length; i < max; i++) {
+			let message = JSON.parse(messages[i].text);
+			if (message.from === global.visitor) {
+				chatView.state.messages[chatView.state.messages.length] = [message.text,2];
+			}else{
+				chatView.state.messages[chatView.state.messages.length] = [message.text,1];
+			}
+			chatView.setState({dataSource:chatView.state.dataSource.cloneWithRows(chatView.state.messages)});
+		}
+	}).catch(console.error.bind(console));
 }
 
 export function createConversation(username,sendTo) {
