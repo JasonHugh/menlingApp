@@ -5,7 +5,10 @@ import {
 	TouchableHighlight,
 	StyleSheet,
 	TextInput,
-	Alert
+	Alert,
+	Dimensions,
+	Image,
+	ToastAndroid
 } from 'react-native'
 import Conf from '../../Utils/Conf'
 import NavBar from '../../Components/NavBar'
@@ -20,36 +23,34 @@ export default class RegView extends Component {
 	}
 	render() {
 		return (
-			<View style={{flex:1}}>
-				<NavBar title="创建门铃"/>
-				<View style={styles.container}>
-					<View style={styles.form}>
-						<TextInput style={styles.inputBox}
-							onChangeText={(text) => this.setState({username: text})}
-							placeholder="请输入你要创建的门铃号"
-							underlineColorAndroid='#fff'
-							ref='inputUser'
-						/>
-						<TextInput style={styles.inputBox}
-							onChangeText={(text) => this.setState({password: text})}
-							placeholder="请输入密码"
-							secureTextEntry={true}
-							underlineColorAndroid='#fff'
-							ref='inputPwd'
-						/>
-						<TouchableHighlight style={styles.sendBtn} underlayColor='#71D54A' onPress={this._onPress.bind(this)}>
-			            	<Text style={styles.btnText}>
-			                	确认创建
-			              	</Text>
-		          		</TouchableHighlight>
-		          		<TouchableHighlight style={[styles.sendBtn,{marginTop:5,backgroundColor:'#339933'}]} underlayColor='#71D54A' onPress={this._onPress1.bind(this)}>
-			            	<Text style={styles.btnText}>
-			                	门铃登陆
-			              	</Text>
-		          		</TouchableHighlight>
-					</View>
+			<Image source={require('../../assets/login_bg.jpg')} style={styles.container}>
+				<View style={styles.form}>
+					<Text style={styles.title}>创建门铃</Text>
+					<TextInput style={styles.inputBox}
+						onChangeText={(text) => this.setState({username: text})}
+						placeholder="请输入你要创建的门铃号"
+						underlineColorAndroid='#fff'
+						ref='inputUser'
+					/>
+					<TextInput style={styles.inputBox}
+						onChangeText={(text) => this.setState({password: text})}
+						placeholder="请输入密码"
+						secureTextEntry={true}
+						underlineColorAndroid='#fff'
+						ref='inputPwd'
+					/>
+					<TouchableHighlight style={styles.sendBtn} underlayColor='#71D54A' onPress={this._onPress.bind(this)}>
+		            	<Text style={styles.btnText}>
+		                	确认创建
+		              	</Text>
+	          		</TouchableHighlight>
+	          		<TouchableHighlight style={[styles.sendBtn,{marginTop:20,backgroundColor:'#339933',borderColor:'#339933'}]} underlayColor='#71D54A' onPress={this._onPress1.bind(this)}>
+		            	<Text style={styles.btnText}>
+		                	登陆门铃
+		              	</Text>
+	          		</TouchableHighlight>
 				</View>
-			</View>
+			</Image>
 		);
 	}
 
@@ -57,7 +58,7 @@ export default class RegView extends Component {
 		let username = this.state.username;
 		let password = this.state.password;
 		if (username.trim() == "" | password.trim() == "") {
-			Alert.alert("用户名或密码不能为空");
+			ToastAndroid.show("用户名或密码不能为空",Conf.toastTime);
 			return;
 		}
 		let response = this._addUserToApi(username,password);
@@ -88,9 +89,9 @@ export default class RegView extends Component {
 	async _saveUserToStorage(data) {
 		if (data.code) {
 			if (data.code == 202) {
-				Alert.alert("用户名已存在！");
+				ToastAndroid.show("用户名已存在！",Conf.toastTime);
 			}else{
-				Alert.alert(data.error);
+				ToastAndroid.show(data.error,Conf.toastTime);
 			}
 		}else if (data.sessionToken && data.username) {
 			sessionToken = data.sessionToken;
@@ -106,43 +107,55 @@ export default class RegView extends Component {
 			global.loginState = {sessionToken:sessionToken,username: username};
 			//页面跳转
 			this.props.navigator.push({
-		  		id: 'home',
-		  		index: 1,
+		  		id: 'home'
 			});
 		}else {
-			Alert.alert("获取数据错误");
+			ToastAndroid.show("获取数据错误",Conf.toastTime);
 		}
 	}
 	_onPress1() {
-		this.props.navigator.push({
-	  		id: 'login',
-	  		type:'left'
-		});
+		this.props.navigator.pop();
 	}
 }
 
+var { width, height } = Dimensions.get('window');
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		backgroundColor: '#99CCFF',
 		justifyContent: 'center',
-		alignItems: 'center'
+		alignItems: 'center',
+		width:width, 
+    	height:498*width/750
+	},
+	title:{
+		fontSize:20,
+		alignItems:'center',
+		color:'#fff',
+		textAlign:'center',
+		marginBottom: 20
 	},
 	inputBox: {
 		textDecorationLine: "none",
-		width:250,
+		width:280,
 		height:50,
 		fontSize: 14,
-		marginTop:10,
+		marginTop:20,
+		paddingHorizontal:30,
+		borderWidth:1,
+		borderColor:'#fff',
+		borderRadius: 25,
+		color:'#fff'
 	},
 	sendBtn: {
-	    height:60,
-	    backgroundColor: '#008263',
+	    height:50,
+	    backgroundColor: '#51B2F9',
 	  	justifyContent: 'center',
 	  	alignItems: 'center',
-    	marginTop: 30,
+    	marginTop: 20,
     	borderWidth: 1,
-    	borderColor: '#fff',
+    	borderColor: '#51B2F9',
+    	borderRadius:25,
     	opacity: 0.8
   	},
   	btnText: {

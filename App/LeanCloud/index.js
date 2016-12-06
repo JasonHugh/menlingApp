@@ -3,7 +3,7 @@ import Conf from '../Utils/Conf'
 import {Alert} from 'react-native'
 
 const realtime = new Realtime({
-  appId: 'nfxWSOjzkw6t3KMkBVsc5LMJ-gzGzoHsz',
+  appId: Conf.leanCloudId,
   region: 'cn', 
 });
 

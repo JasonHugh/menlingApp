@@ -40,14 +40,18 @@ export default class NavigatorComp extends Component {
 	}
 
 	_configureScene(route, routeStack) {
+		let configure = Navigator.SceneConfigs.PushFromRight;  
 	    if (route.type == 'bottom') {
-	    	return Navigator.SceneConfigs.FloatFromBottom; // 底部弹出
+	    	configure = Navigator.SceneConfigs.FloatFromBottom; // 底部弹出
 	    }else if (route.type == 'top') {
-	    	return Navigator.SceneConfigs.PushFromTop; // 顶部弹出
+	    	configure = Navigator.SceneConfigs.PushFromTop; // 顶部弹出
 	    }else if (route.type == 'left') {
-	    	return Navigator.SceneConfigs.PushFromLeft; // 左侧弹出
-	    }else{
-	    	return Navigator.SceneConfigs.PushFromRight; // 右侧弹出
+	    	configure = Navigator.SceneConfigs.PushFromLeft; // 左侧弹出
+	    }
+
+	    return {
+	    	...configure,
+	    	gestures:{}
 	    }
 	 }
 

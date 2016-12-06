@@ -112,7 +112,7 @@ export default class HomeView extends Component {
 			        			onPress={this._pageOnPress.bind(this)}>
 					        	<View style={styles.textBox}>
 					        		<Text style={{fontSize:20,color:'#fff'}}>
-					        			对话来访者
+					        			对话访客
 					        		</Text>
 					        	</View>
 			        		</TouchableOpacity>
@@ -128,7 +128,7 @@ export default class HomeView extends Component {
 					        		</Text>
 					        	</View>
 			        		</TouchableOpacity>
-				        	<Text style={{fontSize:8,backgroundColor:'#ddd',alignSelf:'center',marginTop:10}}>用户反馈邮箱：464147349@qq.com</Text>
+				        	<Text style={{fontSize:8,backgroundColor:'#ddd',alignSelf:'center',marginTop:10}}>用户反馈邮箱：anyanhu@outlook.com</Text>
 				        </View>
 				    </View>
 			    	<View>

@@ -24,14 +24,14 @@ export default class WelcomeView extends Component {
 	render() {
 		return(
 			<View style={styles.container}>
-				<Text style={styles.title}>门铃</Text>
+				<Text style={styles.title}>简单门铃</Text>
 				<Image style={styles.logo} source={require('../../assets/logo.png')} />
 			</View>
 		);
 	}
 
 	_jump(firstViewId) {
-		this.props.navigator.replace({
+		this.props.navigator.push({
 		  id: firstViewId
 		});
 	}
