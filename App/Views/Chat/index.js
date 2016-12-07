@@ -24,8 +24,8 @@ export default class ChatView extends Component {
       this.username = loginState.username;
     }
     this.state = {
-      messages:[["没人敲门",0]],
-      dataSource: ds.cloneWithRows([["没人敲门",0],]),
+      messages:[["和访客对话",0]],
+      dataSource: ds.cloneWithRows([["和访客对话",0],]),
       message: "",
       loaded: true,
       inputTextMarginBottom: 0,   //键盘开启时marginBottom增大
@@ -38,7 +38,7 @@ export default class ChatView extends Component {
     });
     PushAndroid.getCustomer((msg) => {
         if (msg === "") {
-          global.customer = "没人敲门";
+          global.customer = "和访客对话";
         }else{
           global.customer = msg + ' 在敲门啦！';
         }

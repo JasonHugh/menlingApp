@@ -98,7 +98,7 @@ export default class HomeView extends Component {
 			        	<View style={styles.tabBar}>
 				        	<Animated.Text style={[styles.tabActive,{left: this.state.tabBtnLeft}]}
 				        		onPress={() => {}}/>
-			        		<Text style={{position:'absolute',right:30,top:2,color:'#fff'}}>创业资讯</Text>
+			        		<Text style={{position:'absolute',right:30,top:4,color:'#fff'}}>新闻资讯</Text>
 			        	</View>
 			        </TouchableWithoutFeedback>
 			    </View>

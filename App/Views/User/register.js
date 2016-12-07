@@ -23,23 +23,26 @@ export default class RegView extends Component {
 	}
 	render() {
 		return (
-			<Image source={require('../../assets/login_bg.jpg')} style={styles.container}>
+			<Image source={require('../../assets/login_bg.jpg')} style={styles.container}
+				resizeMode='cover'>
 				<View style={styles.form}>
 					<Text style={styles.title}>创建门铃</Text>
 					<TextInput style={styles.inputBox}
 						onChangeText={(text) => this.setState({username: text})}
 						placeholder="请输入你要创建的门铃号"
-						underlineColorAndroid='#fff'
+						placeholderTextColor='#fff'
+						underlineColorAndroid='transparent'
 						ref='inputUser'
 					/>
 					<TextInput style={styles.inputBox}
 						onChangeText={(text) => this.setState({password: text})}
 						placeholder="请输入密码"
+						placeholderTextColor='#fff'
 						secureTextEntry={true}
-						underlineColorAndroid='#fff'
+						underlineColorAndroid='transparent'
 						ref='inputPwd'
 					/>
-					<TouchableHighlight style={styles.sendBtn} underlayColor='#71D54A' onPress={this._onPress.bind(this)}>
+					<TouchableHighlight style={styles.sendBtn} underlayColor='#495a80' onPress={this._onPress.bind(this)}>
 		            	<Text style={styles.btnText}>
 		                	确认创建
 		              	</Text>
@@ -136,7 +139,6 @@ const styles = StyleSheet.create({
 		marginBottom: 20
 	},
 	inputBox: {
-		textDecorationLine: "none",
 		width:280,
 		height:50,
 		fontSize: 14,
