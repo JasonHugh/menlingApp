@@ -40,8 +40,12 @@ public class RingService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mp.stop();
-        mp.release();
+        try{
+            mp.stop();
+            mp.release();
+        }catch(Exception e){
+            Log.i("MediaPlayer",e.getMessage());
+        }
     }
  
 }

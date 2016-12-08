@@ -34,10 +34,14 @@ export default class ChatView extends Component {
     };
     //获取visitorID,customer
     PushAndroid.getVisitorId((msg) => {
-        global.visitor = msg;
+        if (msg !== "" && msg !== null) {
+          global.visitor = msg;
+        }else{
+          global.visitor = "";
+        }
     });
     PushAndroid.getCustomer((msg) => {
-        if (msg === "") {
+        if (msg === "" || msg === null) {
           global.customer = "和访客对话";
         }else{
           global.customer = msg + ' 在敲门啦！';
@@ -47,7 +51,7 @@ export default class ChatView extends Component {
     });
     //获取convId,conversation
     PushAndroid.getConvId((msg) => {
-      if (msg !== "") {
+      if (msg !== "" && msg !== null) {
         getConvById(this.username,msg,this);
       }
     });

@@ -41,10 +41,14 @@ public class MainActivity extends ReactActivity {
 
 		//查看是否有通知,关闭响铃
 		Intent intent = getIntent();
-		int isRing = intent.getIntExtra("isRing",0);
-		if (isRing == 1) {
-			Intent i=new Intent(MainActivity.this,RingService.class);
-        	stopService(i);
-		}
+		//int isRing = intent.getIntExtra("isRing",0);
+		//把需要的数据存入变量
+		GlobalData.visitor = intent.getStringExtra("visitor");
+		GlobalData.customer = intent.getStringExtra("customer");
+		GlobalData.convId = intent.getStringExtra("convId");
+		//if (isRing == 1) {
+		//	Intent i=new Intent(MainActivity.this,RingService.class);
+        //	stopService(i);
+		//}
   	}
 }
