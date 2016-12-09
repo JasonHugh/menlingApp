@@ -21,6 +21,7 @@ public class RingService extends Service {
     public void onStart(Intent intent, int startId) {
         super.onStart(intent, startId);
         mp=MediaPlayer.create(this,R.raw.ring);
+        final int id = startId;
         mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             private int count = 0;
             @Override
@@ -31,21 +32,17 @@ public class RingService extends Service {
                 }else {
                     mp.stop();
                     mp.release();
+                    stopSelf(id);
                 }
                 Log.i("count",count+"");
             }
         });
         mp.start();
     } 
+    
     @Override
     public void onDestroy() {
         super.onDestroy();
-        try{
-            mp.stop();
-            mp.release();
-        }catch(Exception e){
-            Log.i("MediaPlayer",e.getMessage());
-        }
     }
  
 }

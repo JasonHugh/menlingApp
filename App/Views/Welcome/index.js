@@ -14,11 +14,11 @@ export default class WelcomeView extends Component {
 		setTimeout(()=>{
 			//判断用户是否登陆
 			let firstViewId = 'login'
-			if (loginState) {
+			if (global.loginState) {
 				firstViewId = 'home';
 			}
 			this._jump(firstViewId);
-		},1000);
+		},500);
 	}
 
 	render() {

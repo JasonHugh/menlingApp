@@ -12,6 +12,7 @@ import {
 } from 'react-native'
 import Conf from '../../Utils/Conf'
 import NavBar from '../../Components/NavBar'
+import { saveStorage } from '../../LocalStorage'
 
 export default class LoginView extends Component {
 	constructor(props) {
@@ -99,12 +100,9 @@ export default class LoginView extends Component {
 		}else if (data.sessionToken && data.username) {
 			sessionToken = data.sessionToken;
 			username = data.username;
-			storage.save({
-			    key: 'loginState',
-			    rawData: { 
-			      sessionToken: sessionToken,
-			      username: username
-				}
+			saveStorage('loginState',{ 
+		      	sessionToken: sessionToken,
+		      	username: username
 			});
 			//记录登陆状态
 			global.loginState = {sessionToken:sessionToken,username: username};
