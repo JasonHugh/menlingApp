@@ -100,7 +100,7 @@ export default class ChatView extends Component {
   _renderChatView() {
   	return (
       <View style={styles.container}>
-        <NavBar leftBtn={true} leftOnPress={() => {this.props.navigator.pop()}}/>
+        <NavBar leftBtn={true} leftOnPress={() => {this.props.navigator.pop()}} rightBtn={true} rightOnPress={() => {this.props.navigator.push({id:'record'})}}/>
         <ListView
           ref='listView'
           dataSource={this.state.dataSource}

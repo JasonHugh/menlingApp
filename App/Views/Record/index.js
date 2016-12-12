@@ -16,7 +16,7 @@ export default class Record extends Component {
 	render() {
 		return (
 			<View style={{flex:1,backgroundColor:'#fff'}}>
-				<NavBar leftBtn={true} leftOnPress={() => {this.props.navigator.pop()}} />
+				<NavBar leftBtn={true} leftOnPress={() => {this.props.navigator.pop()}} title='敲门记录'/>
 				<GiftedListView
 		          	enableEmptySections={true}
 	                rowView={this._renderRowView.bind(this)}
@@ -33,13 +33,13 @@ export default class Record extends Component {
 	}
 
 	_onFetch(page = 1, callback, options) {
-		if (page === 5) {
+		if (page === 11) {
 			var rows = {}
 			callback(rows, {
 		  		allLoaded: true,
 			});
 		} else {
-			getConversationList(global.loginState.username, page , 3, (data) => {
+			getConversationList(global.loginState.username, page , 1, (data) => {
 				
 				callback(data);
 			});

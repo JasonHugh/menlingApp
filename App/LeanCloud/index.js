@@ -81,22 +81,29 @@ export function getConversationList(username, page , pageSize,callback) {
 	realtime.createIMClient(username).then(function(v) {
 		var offset = (page - 1) * pageSize
 		var today = new Date(new Date(Date.now() - (offset-1) * 24 * 3600 * 1000).Format("yyyy-MM-dd"));
+		console.log('today',today);
 		var fromday = new Date(new Date(today.getTime() - (pageSize) * 24 * 3600 * 1000).Format("yyyy-MM-dd"));
-		v.getQuery().greaterThan('createdAt', fromday).lessThan('createdAt', today).limit(20).containsMembers([username]).find().then(function(conversations) {
+		console.log('fromday',fromday);
+		var query = v.getQuery();
+		query = query.greaterThan('createdAt', fromday).lessThan('createdAt', today);
+		query.addDescending('createdAt').limit(20).containsMembers([username]).find().then(function(conversations) {
+			console.log('length',conversations.length);
 			// 默认按每个对话的最后更新日期（收到最后一条消息的时间）倒序排列
 			var data = {};
-			for (var i = conversations.length - 1; i >= 0; i--) {
-				var createAt = new Date(conversations[i].createdAt);
-				var createDate = createAt.Format("yyyy年MM月dd日");
-				var createTime = createAt.Format("hh:mm:ss");
-				if (!data[createDate]) {
-					data[createDate] = [{name:conversations[i].members[0],time:createTime},]
-				}else {
-					data[createDate].push({name:conversations[i].members[0],time:createTime})
+			if (conversations.length === 0) {
+				data[fromday.Format("yyyy年MM月dd日")] = [{name:"今天没有人敲门",time:""},]
+			}else{
+				for (var i = 0,max = conversations.length; i < max; i++) {
+					var createAt = new Date(conversations[i].createdAt);
+					var createDate = createAt.Format("yyyy年MM月dd日");
+					var createTime = createAt.Format("hh:mm:ss");
+					if (!data[createDate]) {
+						data[createDate] = [{name:conversations[i].members[0],time:createTime},]
+					}else {
+						data[createDate].push({name:conversations[i].members[0],time:createTime})
+					}
 				}
 			}
-			console.log('today',today)
-			console.log('fromday',fromday)
 			console.log('row',JSON.stringify(data));
 			callback(data);
 		}).catch(console.error.bind(console));

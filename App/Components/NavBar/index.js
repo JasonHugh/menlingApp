@@ -27,7 +27,7 @@ export default class NavBarComp extends Component {
 	_rightBtn() {
 		if (this.props.rightBtn) {
 			return (
-				<Text style={styles.rightButtonText}>&#xe697;</Text>
+				<Text style={styles.rightButtonText}>&#xe6bf;</Text>
 			)
 		}
 	}
@@ -90,5 +90,10 @@ const styles = {
   	  color:'#fff',
   	  fontSize:16,
   	  fontWeight:'bold'
+  	},
+  	rightButtonText: {
+  	  fontSize: 26,
+  	  fontFamily: 'iconfont',
+  	  color:'#666666'
   	},
 }
