@@ -7,6 +7,7 @@ import {
 	TouchableHighlight,
 	Alert
 } from 'react-native'
+import { login } from '../../LeanCloud'
 
 export default class WelcomeView extends Component {
 	constructor(props) {

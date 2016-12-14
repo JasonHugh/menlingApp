@@ -13,7 +13,7 @@ import {
   Alert
 } from 'react-native';
 import NavBar from '../../Components/NavBar'
-import {sendMessage,receiveMessage,getConvById} from '../../LeanCloud'
+import {sendMessage,receiveMessage,getConvById,login} from '../../LeanCloud'
 import PushAndroid from '../../PushAndroid'
 
 export default class ChatView extends Component {
@@ -56,6 +56,8 @@ export default class ChatView extends Component {
       }
     });
     
+    //lencloud 登陆
+    login(global.loginState.username);
     //从leancloud接收消息
     receiveMessage(this.username,this);
   }
@@ -100,7 +102,7 @@ export default class ChatView extends Component {
   _renderChatView() {
   	return (
       <View style={styles.container}>
-        <NavBar leftBtn={true} leftOnPress={() => {this.props.navigator.pop()}} rightBtn={true} rightOnPress={() => {this.props.navigator.push({id:'record'})}}/>
+        <NavBar leftBtn={true} leftOnPress={() => {this.props.navigator.pop()}} rightBtn={true} rightImg="&#xe6bf;" rightOnPress={() => {this.props.navigator.push({id:'record'})}}/>
         <ListView
           ref='listView'
           dataSource={this.state.dataSource}

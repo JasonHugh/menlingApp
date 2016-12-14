@@ -7,6 +7,12 @@ const realtime = new Realtime({
   region: 'cn', 
 });
 
+export function login(username) {
+	realtime.createIMClient(username).then(function(user) {
+		global.user = user;
+	}).catch(console.error);
+}
+
 export function sendMessage(username,message) {
 	if (global.conversation) {
 		global.conversation.send(new TextMessage(JSON.stringify({text:message,from:username})))
@@ -78,36 +84,32 @@ function getPastMessage(conversation,chatView){
 
 //获取聊天记录
 export function getConversationList(username, page , pageSize,callback) {
-	realtime.createIMClient(username).then(function(v) {
-		var offset = (page - 1) * pageSize
-		var today = new Date(new Date(Date.now() - (offset-1) * 24 * 3600 * 1000).Format("yyyy-MM-dd"));
-		console.log('today',today);
-		var fromday = new Date(new Date(today.getTime() - (pageSize) * 24 * 3600 * 1000).Format("yyyy-MM-dd"));
-		console.log('fromday',fromday);
-		var query = v.getQuery();
-		query = query.greaterThan('createdAt', fromday).lessThan('createdAt', today);
-		query.addDescending('createdAt').limit(20).containsMembers([username]).find().then(function(conversations) {
-			console.log('length',conversations.length);
-			// 默认按每个对话的最后更新日期（收到最后一条消息的时间）倒序排列
-			var data = {};
-			if (conversations.length === 0) {
-				data[fromday.Format("yyyy年MM月dd日")] = [{name:"今天没有人敲门",time:""},]
-			}else{
-				for (var i = 0,max = conversations.length; i < max; i++) {
-					var createAt = new Date(conversations[i].createdAt);
-					var createDate = createAt.Format("yyyy年MM月dd日");
-					var createTime = createAt.Format("hh:mm:ss");
-					if (!data[createDate]) {
-						data[createDate] = [{name:conversations[i].members[0],time:createTime},]
-					}else {
-						data[createDate].push({name:conversations[i].members[0],time:createTime})
-					}
+	var offset = (page - 1) * pageSize
+	var today = new Date(new Date(Date.now() - (offset-1) * 24 * 3600 * 1000).Format("yyyy-MM-dd"));
+	console.log('today',today);
+	var fromday = new Date(today.getTime() - (pageSize) * 24 * 3600 * 1000);
+	console.log('fromday',fromday);
+	var query = global.user.getQuery();
+	query = query.greaterThan('createdAt', fromday).lessThan('createdAt', today);
+	query.addDescending('createdAt').limit(100).containsMembers([username]).find().then(function(conversations) {
+		console.log('length',conversations.length);
+		// 默认按每个对话的最后更新日期（收到最后一条消息的时间）倒序排列
+		var data = {};
+		if (conversations.length !== 0) {
+			for (var i = 0,max = conversations.length; i < max; i++) {
+				var createAt = new Date(conversations[i].createdAt);
+				var createDate = createAt.Format("yyyy年MM月dd日");
+				var createTime = createAt.Format("hh:mm:ss");
+				if (!data[createDate]) {
+					data[createDate] = [{name:conversations[i].members[0],time:createTime},]
+				}else {
+					data[createDate].push({name:conversations[i].members[0],time:createTime})
 				}
 			}
-			console.log('row',JSON.stringify(data));
-			callback(data);
-		}).catch(console.error.bind(console));
-	}).catch(console.error);
+		}
+		console.log('row',JSON.stringify(data));
+		callback(data);
+	}).catch(console.error.bind(console));
 }
 
 export function createConversation(username,sendTo) {

@@ -14,6 +14,11 @@ export default class NavBarComp extends Component {
 		}else{
 			this.title = "简单门铃"
 		}
+		if (this.props.rightImg) {
+			this.rightImg = this.props.rightImg
+		}else {
+			this.rightImg = "";
+		}
 	}
 
 	_leftBtn() {
@@ -27,7 +32,7 @@ export default class NavBarComp extends Component {
 	_rightBtn() {
 		if (this.props.rightBtn) {
 			return (
-				<Text style={styles.rightButtonText}>&#xe6bf;</Text>
+				<Text style={styles.rightButtonText}>{this.rightImg}</Text>
 			)
 		}
 	}
@@ -67,33 +72,35 @@ export default class NavBarComp extends Component {
 
 const styles = {
   	navBar: {
-  	  flex: 0,
-  	  height:50,
-  	  justifyContent:'center',
-  	  alignItems: 'center',
-  	  backgroundColor: '#E46D65',
-  	  flexDirection: 'row',
+		flex: 0,
+		height:50,
+		alignItems: 'center',
+		backgroundColor: '#E46D65',
+		flexDirection: 'row',
   	},
   	navButton: {
-  	  flex: 0,
-  	  width: 50,
-  	  margin: 10
+		flex: 0,
+		width: 50,
+		height: 50,
+		justifyContent:'center',
+		alignItems: 'center',
   	},
   	leftButtonText: {
-  	  fontSize: 30,
-  	  fontFamily: 'iconfont',
-  	  color:'#666666'
+		fontSize: 30,
+		fontFamily: 'iconfont',
+		color:'#666666'
   	},
   	title: {
-  	  flex: 1,
-  	  textAlign:'center',
-  	  color:'#fff',
-  	  fontSize:16,
-  	  fontWeight:'bold'
+		flex: 1,
+		textAlign:'center',
+		color:'#fff',
+		fontSize:16,
+		fontWeight:'bold'
   	},
   	rightButtonText: {
-  	  fontSize: 26,
-  	  fontFamily: 'iconfont',
-  	  color:'#666666'
+		fontSize: 28,
+		marginRight: 15,
+		fontFamily: 'iconfont',
+		color:'#666666'
   	},
 }
