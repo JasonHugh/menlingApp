@@ -56,8 +56,6 @@ export default class ChatView extends Component {
       }
     });
     
-    //lencloud 登陆
-    login(global.loginState.username);
     //从leancloud接收消息
     receiveMessage(this.username,this);
   }
@@ -102,7 +100,7 @@ export default class ChatView extends Component {
   _renderChatView() {
   	return (
       <View style={styles.container}>
-        <NavBar leftBtn={true} leftOnPress={() => {this.props.navigator.pop()}} rightBtn={true} rightImg="&#xe6bf;" rightOnPress={() => {this.props.navigator.push({id:'record'})}}/>
+        <NavBar leftBtn={true} leftOnPress={() => {this.props.navigator.pop()}}/>
         <ListView
           ref='listView'
           dataSource={this.state.dataSource}

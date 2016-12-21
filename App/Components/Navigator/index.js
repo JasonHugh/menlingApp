@@ -14,7 +14,9 @@ import LoginView from '../../Views/User/login'
 import RegView from '../../Views/User/register'
 import HomeView from '../../Views/Home'
 import QRCodeView from '../../Views/QRCode'
-import Record from '../../Views/Record'
+import RecordView from '../../Views/Record'
+import MyView from '../../Views/My'
+import ContainComp from '../../Components/Contain'
 
 export default class NavigatorComp extends Component {
 	constructor(props) {
@@ -59,7 +61,9 @@ export default class NavigatorComp extends Component {
 			case 'login': return(<LoginView  navigator={navigator} route={route}/>);
 			case 'home': return(<HomeView  navigator={navigator} route={route}/>);
 			case 'qrcode': return(<QRCodeView  navigator={navigator} route={route}/>);
-			case 'record': return(<Record  navigator={navigator} route={route}/>);
+			case 'record': return(<RecordView  navigator={navigator} route={route}/>);
+			case 'contain': return(<ContainComp  navigator={navigator} route={route}/>);
+			case 'my': return(<MyView  navigator={navigator} route={route}/>);
 		}
 	}
 }

@@ -7,7 +7,6 @@ import {
 	TouchableHighlight,
 	Alert
 } from 'react-native'
-import { login } from '../../LeanCloud'
 
 export default class WelcomeView extends Component {
 	constructor(props) {
@@ -16,7 +15,7 @@ export default class WelcomeView extends Component {
 			//判断用户是否登陆
 			let firstViewId = 'login'
 			if (global.loginState) {
-				firstViewId = 'home';
+				firstViewId = 'contain';
 			}
 			this._jump(firstViewId);
 		},500);

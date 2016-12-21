@@ -14,13 +14,15 @@ export default class Record extends Component {
 		this.state = {};
 		var record = this;
 		//获取并缓存敲门记录
-		getConversationList(global.loginState.username, 1, 20, (data) => {record.setState({data:data})});
+		if (!global.recordData) {
+			getConversationList(global.loginState.username, 1, 20, (data) => {global.recordData = data});
+		}
 	}
 
 	render() {
 		return (
 			<View style={{flex:1,backgroundColor:'#fff'}}>
-				<NavBar leftBtn={true} leftOnPress={() => {this.props.navigator.pop()}} title='近20天敲门记录'/>
+				<NavBar title='近20天敲门记录'/>
 				<GiftedListView
 		          	enableEmptySections={true}
 	                rowView={this._renderRowView.bind(this)}
@@ -44,20 +46,21 @@ export default class Record extends Component {
 			});
 		} else {
 			setTimeout(() => {
-				if (this.state.data) {
+				while (global.recordData) {
 					var pageSize = 5,
 						day,
 						offset = (page - 1) * pageSize,
 						data = [];
 					for (var i = 0; i < pageSize; i++) {
 						day = new Date(Date.now() - (offset+i) * 24 * 3600 * 1000).Format("yyyy年MM月dd日")
-						if (this.state.data[day]) {
-							data[day] = this.state.data[day];
+						if (global.recordData[day]) {
+							data[day] = global.recordData[day];
 						}else {
 							data[day] = [{name:"今天没有人敲门",time:""},]
 						}
 					}
 					callback(data);
+					break;
 				}
 			},500)
 		}

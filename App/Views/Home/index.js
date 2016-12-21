@@ -34,19 +34,6 @@ export default class HomeView extends Component {
 			url: 'http://36kr.com/p/5055297.html'
 		}
 	}
-	//重写后退键
-	componentDidMount() {
-		BackAndroid.addEventListener('hardwareBackPress',() => {
-			let routers = this.props.navigator.getCurrentRoutes();
-			let top = routers[routers.length - 1];
-   			if (top.id != 'home') {
-				this.props.navigator.pop();
-   				
-   				return true;
-   			}
-   			return false
-		});
-	}
 
 	_renderRowView(rowData) {
 	    return (
