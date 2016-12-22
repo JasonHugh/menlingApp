@@ -15,7 +15,7 @@ export default class ContainComp extends Component {
 	constructor(props) {
         super(props);
         this.state = {
-        	selectedTab: "my"
+        	selectedTab: "home"
         }
         //lencloud 登陆
         login(global.loginState.username);
