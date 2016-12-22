@@ -1,6 +1,6 @@
 import {Realtime,TextMessage} from 'leancloud-realtime'
 import Conf from '../Utils/Conf'
-import {Alert} from 'react-native'
+import {Alert,ToastAndroid} from 'react-native'
 
 const realtime = new Realtime({
   appId: Conf.leanCloudId,
@@ -123,28 +123,24 @@ export function createConversation(username,sendTo) {
 	})
 }
 
-export async function install() {
-	var time = new Date().getTime();
-	console.info(time);
+export async function editPassword(old_password,new_password) {
 	try {
-      	let response = await fetch('https://leancloud.cn/1.1/installations', {
-		  	method: 'POST',
+      	let response = await fetch('https://api.leancloud.cn/1.1/users/'+global.loginState.objectId+'/updatePassword', {
+		  	method: 'PUT',
 		  	headers: {
 		  	  	'Accept': 'application/json',
 		  	  	'Content-Type': 'application/json',
 			    'X-LC-Id': Conf.leanCloudId,
-			    'X-LC-Key': Conf.leanCloudKey
+			    'X-LC-Key': Conf.leanCloudKey,
+			    'X-LC-Session': global.loginState.sessionToken
 		  	},
 		  	body: JSON.stringify({
-		        "deviceType": "android",
-		        "installationId": time+'abcd',
-		        "channels": [
-		          "public", "protected", "private"
-		        ]
+		        "old_password": old_password,
+		        "new_password": new_password
 	      	})
 	  	});
       	let responseJson = await response.json();
-      	await alert(responseJson.objectId)
+      	return responseJson;
     } catch(error) {
       console.error(error);
     }

@@ -10,7 +10,7 @@
   "dependencies": {
     "leancloud-realtime": "^3.2.3",
     "leancloud-realtime-plugin-typed-messages": "^1.0.0",
-    "leancloud-storage": "^1.5.0",
+    "leancloud-storage": "^1.5.3",
     "react": "15.3.2",
     "react-native": "0.35.0",
     "react-native-gifted-listview": "0.0.15",

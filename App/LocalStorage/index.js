@@ -49,3 +49,11 @@ export function saveStorage(key,value) {
 	});
 }
 
+export function deleteStorage(key) {
+	storage.save({
+	    key: key,
+	    rawData: null
+	});
+	global.loginState = null;
+}
+

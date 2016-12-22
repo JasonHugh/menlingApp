@@ -93,7 +93,7 @@ export default class HomeView extends Component {
 			     	onPageSelected={this._tabOnPress.bind(this)}
 			    	ref='viewPage'>
 			    	<View>
-				        <View style={[styles.tabPage,{backgroundColor:'#ddd',marginBottom:20}]}>
+				        <View style={[styles.tabPage,{backgroundColor:'#eee',marginBottom:20}]}>
 			    			<TouchableOpacity style={{flex:1,backgroundColor:'#0cf'}}
 			    			 	activeOpacity = {0.5}
 			        			onPress={this._pageOnPress.bind(this)}>
@@ -115,7 +115,7 @@ export default class HomeView extends Component {
 					        		</Text>
 					        	</View>
 			        		</TouchableOpacity>
-				        	<Text style={{fontSize:8,backgroundColor:'#ddd',alignSelf:'center',marginTop:10}}>用户反馈邮箱：anyanhu@outlook.com</Text>
+				        	<Text style={{fontSize:8,alignSelf:'center',marginTop:10}}>用户反馈邮箱：anyanhu@outlook.com</Text>
 				        </View>
 				    </View>
 			    	<View>
@@ -201,7 +201,7 @@ export default class HomeView extends Component {
 const styles = {
     container: {
         flex: 1,
-        backgroundColor: '#ddd'
+        backgroundColor: '#eee'
     },
     paginationView: {
 	    height: 44,

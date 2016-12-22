@@ -98,17 +98,20 @@ export default class LoginView extends Component {
 				ToastAndroid.show(data.error,Conf.toastTime);
 			}
 		}else if (data.sessionToken && data.username) {
-			sessionToken = data.sessionToken;
-			username = data.username;
+			var sessionToken = data.sessionToken
+				,username = data.username
+				,objId = data.objectId;
 			saveStorage('loginState',{ 
 		      	sessionToken: sessionToken,
-		      	username: username
+		      	username: username,
+		      	objectId: objId
 			});
+			//console.log(JSON.stringify(data))
 			//记录登陆状态
-			global.loginState = {sessionToken:sessionToken,username: username};
+			global.loginState = {sessionToken:sessionToken,username: username,objectId: objId};
 			//页面跳转
 			this.props.navigator.push({
-		  		id: 'home'
+		  		id: 'contain'
 			});
 		}else {
 			ToastAndroid.show("获取数据错误",Conf.toastTime);

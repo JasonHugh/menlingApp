@@ -15,7 +15,7 @@ export default class ContainComp extends Component {
 	constructor(props) {
         super(props);
         this.state = {
-        	selectedTab: "home"
+        	selectedTab: "my"
         }
         //lencloud 登陆
         login(global.loginState.username);
@@ -27,7 +27,7 @@ export default class ContainComp extends Component {
         BackAndroid.addEventListener('hardwareBackPress',() => {
             let routers = this.props.navigator.getCurrentRoutes();
             let top = routers[routers.length - 1];
-            if (top.id != 'contain') {
+            if (top.id != 'contain' && top.id != 'login') {
                 this.props.navigator.pop();
                 
                 return true;
