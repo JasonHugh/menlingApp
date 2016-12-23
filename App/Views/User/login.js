@@ -30,7 +30,7 @@ export default class LoginView extends Component {
 					<Text style={styles.title}>登陆门铃</Text>
 					<TextInput style={styles.inputBox}
 						onChangeText={(text) => this.setState({username: text})}
-						placeholder="请输入门铃号"
+						placeholder="请输入用户名"
 						placeholderTextColor='#fff'
 						underlineColorAndroid='transparent'
 						ref='inputUser'

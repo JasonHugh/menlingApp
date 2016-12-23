@@ -3,8 +3,12 @@ import Conf from '../Utils/Conf'
 import {Alert,ToastAndroid} from 'react-native'
 
 const realtime = new Realtime({
-  appId: Conf.leanCloudId,
-  region: 'cn', 
+	appId: Conf.leanCloudId,
+	region: 'cn', 
+});
+
+realtime.on('disconnect', function() {
+  console.log('网络连接已断开');
 });
 
 export function login(username) {
@@ -86,30 +90,30 @@ function getPastMessage(conversation,chatView){
 export function getConversationList(username, page , pageSize,callback) {
 	var offset = (page - 1) * pageSize
 	var today = new Date(new Date(Date.now() - (offset-1) * 24 * 3600 * 1000).Format("yyyy-MM-dd"));
-	console.log('today',today);
 	var fromday = new Date(today.getTime() - (pageSize) * 24 * 3600 * 1000);
-	console.log('fromday',fromday);
-	var query = global.user.getQuery();
-	query = query.greaterThan('createdAt', fromday).lessThan('createdAt', today);
-	query.addDescending('createdAt').limit(100).containsMembers([username]).find().then(function(conversations) {
-		console.log('length',conversations.length);
-		// 默认按每个对话的最后更新日期（收到最后一条消息的时间）倒序排列
-		var data = {};
-		if (conversations.length !== 0) {
+	console.log('com.menapp.fromday',fromday);
+	realtime.createIMClient(username).then(function(user) {
+		console.log('com.menapp.user',user);
+		var query = user.getQuery();
+		query = query.greaterThan('createdAt', fromday).lessThan('createdAt', today);
+		query.addDescending('createdAt').limit(400).containsMembers([username]).find().then(function(conversations) {
+			console.log('com.menapp.recordLength',conversations.length);
+			// 默认按每个对话的最后更新日期（收到最后一条消息的时间）倒序排列
+			var data = {};
 			for (var i = 0,max = conversations.length; i < max; i++) {
 				var createAt = new Date(conversations[i].createdAt);
 				var createDate = createAt.Format("yyyy年MM月dd日");
 				var createTime = createAt.Format("hh:mm:ss");
 				if (!data[createDate]) {
-					data[createDate] = [{name:conversations[i].members[0],time:createTime},]
+					data[createDate] = [{name:'访客'+(max-i),time:createTime},]
 				}else {
-					data[createDate].push({name:conversations[i].members[0],time:createTime})
+					data[createDate].push({name:'访客'+(max-i),time:createTime})
 				}
 			}
-		}
-		console.log('row',JSON.stringify(data));
-		callback(data);
-	}).catch(console.error.bind(console));
+			console.log('com.menapp.recordData',data);
+			callback(data);
+		}).catch(console.error.bind(console));
+	}).catch(console.error);
 }
 
 export function createConversation(username,sendTo) {

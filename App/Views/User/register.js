@@ -30,7 +30,7 @@ export default class RegView extends Component {
 					<Text style={styles.title}>创建门铃</Text>
 					<TextInput style={styles.inputBox}
 						onChangeText={(text) => this.setState({username: text})}
-						placeholder="请输入你要创建的门铃号"
+						placeholder="请输入用户名"
 						placeholderTextColor='#fff'
 						underlineColorAndroid='transparent'
 						ref='inputUser'
@@ -63,6 +63,12 @@ export default class RegView extends Component {
 		let password = this.state.password;
 		if (username.trim() == "" | password.trim() == "") {
 			ToastAndroid.show("用户名或密码不能为空",Conf.toastTime);
+			return;
+		}else if (username.trim().length < 3) {
+			ToastAndroid.show("用户名不能小于3个字符",Conf.toastTime);
+			return;
+		}else if (password.trim().length < 3) {
+			ToastAndroid.show("密码不能小于3个字符",Conf.toastTime);
 			return;
 		}
 		let response = this._addUserToApi(username,password);

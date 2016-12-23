@@ -10,6 +10,7 @@ import RecordView from '../../Views/Record'
 import ChatView from '../../Views/Chat' 
 import { login } from '../../LeanCloud'
 import MyView from '../../Views/My'
+import { loadStorage } from '../../LocalStorage'
 
 export default class ContainComp extends Component {
 	constructor(props) {
@@ -17,13 +18,11 @@ export default class ContainComp extends Component {
         this.state = {
         	selectedTab: "home"
         }
-        //lencloud 登陆
-        login(global.loginState.username);
     }
 
 
-    //重写后退键
     componentDidMount() {
+        //重写后退键
         BackAndroid.addEventListener('hardwareBackPress',() => {
             let routers = this.props.navigator.getCurrentRoutes();
             let top = routers[routers.length - 1];
@@ -46,8 +45,8 @@ export default class ContainComp extends Component {
                         title="门铃"
                         titleStyle={styles.tabText}
                         selectedTitleStyle={styles.selectedTabText}
-                        renderIcon={() => <Text style={styles.navIcon}>&#xe501;</Text>}
-                        renderSelectedIcon={() => <Text style={[styles.navIcon,{color:'#0af'}]}>&#xe501;</Text>}
+                        renderIcon={() => <Text style={[styles.navIcon,styles.tabText]}>&#xe501;</Text>}
+                        renderSelectedIcon={() => <Text style={[styles.navIcon,styles.selectedTabText]}>&#xe501;</Text>}
                         onPress={() => this.setState({ selectedTab: 'home' })}>
                         <HomeView navigator={this.props.navigator} route={this.props.route}/>
                     </TabNavigator.Item>
@@ -56,8 +55,8 @@ export default class ContainComp extends Component {
                         title="记录"
                         titleStyle={styles.tabText}
                         selectedTitleStyle={styles.selectedTabText}
-                        renderIcon={() => <Text style={styles.navIcon}>&#xe6bf;</Text>}
-                        renderSelectedIcon={() => <Text style={[styles.navIcon,{color:'#0af'}]}>&#xe6bf;</Text>}
+                        renderIcon={() => <Text style={[styles.navIcon,styles.tabText]}>&#xe6bf;</Text>}
+                        renderSelectedIcon={() => <Text style={[styles.navIcon,styles.selectedTabText]}>&#xe6bf;</Text>}
                         onPress={() => this.setState({ selectedTab: 'record' })}>
                         <RecordView navigator={this.props.navigator} route={this.props.route}/>
                     </TabNavigator.Item>
@@ -66,8 +65,8 @@ export default class ContainComp extends Component {
                         title="我的"
                         titleStyle={styles.tabText}
                         selectedTitleStyle={styles.selectedTabText}
-                        renderIcon={() => <Text style={styles.navIcon}>&#xe6b8;</Text>}
-                        renderSelectedIcon={() => <Text style={[styles.navIcon,{color:'#0af'}]}>&#xe6b8;</Text>}
+                        renderIcon={() => <Text style={[styles.navIcon,styles.tabText]}>&#xe6b8;</Text>}
+                        renderSelectedIcon={() => <Text style={[styles.navIcon,styles.selectedTabText]}>&#xe6b8;</Text>}
                         onPress={() => this.setState({ selectedTab: 'my' })}>
                         <MyView navigator={this.props.navigator} route={this.props.route}/>
                     </TabNavigator.Item>
@@ -87,19 +86,17 @@ var styles = {
 		bottom:0, 
 		left:0,  
 		flex:1,
-		borderTop: '1px solid #aaa',
 	},
 	navIcon: {
 		flex: 1, 
 		textAlign:'center',
 		fontSize: 20,
-		fontFamily: 'iconfont',
-		color:'#fff'
+		fontFamily: 'iconfont'
 	},
 	tabText: {
-        color:'#fff'
+        color:'#ccc'
 	},
 	selectedTabText: {
-
+        color:'#fff'
 	}
 }

@@ -9,14 +9,42 @@ import {
 	Dimensions
 } from 'react-native'
 import NavBar from '../../Components/NavBar'
-import { deleteStorage } from '../../LocalStorage'
+import { deleteStorage,loadStorage } from '../../LocalStorage'
+import { getConversationList } from '../../LeanCloud'
 
 export default class MyView extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			bounceValue: new Animated.Value(0)
+			bounceValue: new Animated.Value(0),
+			allTime: 0,
+			nowTime: 0
 	    };
+	    this.username = global.loginState.username;
+
+	    //获取敲门记录数
+	    if (!global.recordData) {
+			getConversationList(global.loginState.username,1,200,(data) => {
+                global.recordData = data;
+            }) 
+		}
+	    var i = 1;
+	    	my = this;
+	    var t = setInterval(() => {
+	    	var record = global.recordData;
+	    	if (record) {
+	    		var day = new Date().Format("yyyy年MM月dd日"),
+	    			sum = 0;
+		    	if (record[day]) {
+		    		my.setState({nowTime:record[day].length});
+		    	}
+	    		for (var json in record) {
+	    			sum += record[json].length;
+	    		}
+	    		my.setState({allTime:sum});
+	    		clearInterval(t);
+	    	}
+	    },100)
 	}
 
 	render() {
@@ -26,15 +54,15 @@ export default class MyView extends Component {
 				<Image source={require("../../assets/my_top_bg.png")} style={styles.top}
 					resizeMode='cover' >
 					<Image source={require("../../assets/userhead.png")} style={styles.userhead} />
-					<Text style={styles.username}>胡安延</Text>
+					<Text style={styles.username}>{this.username}</Text>
 				</Image>
 				<View style={styles.infoBox}>
 					<View style={styles.infoSubBox} >
-						<Text style={styles.infoText}>150</Text>
-						<Text style={styles.infoText}>敲门次数</Text>
+						<Text style={styles.infoText}>{this.state.allTime}</Text>
+						<Text style={styles.infoText}>访客人次</Text>
 					</View>
 					<View style={[styles.infoSubBox,{borderRightWidth: 0}]} >
-						<Text style={styles.infoText}>1</Text>
+						<Text style={styles.infoText}>{this.state.nowTime}</Text>
 						<Text style={styles.infoText}>今日次数</Text>
 					</View>
 				</View>
@@ -45,13 +73,13 @@ export default class MyView extends Component {
 						<Text style={styles.rowBoxArrow}>&#xe6a7;</Text>
 					</View>
 				</TouchableOpacity>
-				<TouchableOpacity style={styles.rowBox} activeOpacity={0.5} onPress={this._onPress2.bind(this)} > 
+				{/*<TouchableOpacity style={styles.rowBox} activeOpacity={0.5} onPress={this._onPress2.bind(this)} > 
 					<View style={styles.rowSubBox}>
 						<Text style={[styles.rowBoxIcon,{color:'#abb1f3'}]}>&#xe6ae;</Text>
 						<Text style={styles.rowBoxText}>设置你的小区</Text>
 						<Text style={styles.rowBoxArrow}>&#xe6a7;</Text>
 					</View>
-				</TouchableOpacity>
+				</TouchableOpacity>*/}
 				<TouchableOpacity style={styles.rowBox} activeOpacity={0.5} onPress={this._onPress3.bind(this)} > 
 					<View style={styles.rowSubBox}>
 						<Text style={[styles.rowBoxIcon,{color:'#F4A5DE'}]}>&#xe62f;</Text>

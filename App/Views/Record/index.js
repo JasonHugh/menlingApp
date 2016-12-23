@@ -2,21 +2,19 @@ import React, { Component } from 'react'
 import {
 	Text,
 	View,
-	TouchableHighlight
+	TouchableHighlight,
+	ToastAndroid
 } from 'react-native'
 import NavBar from '../../Components/NavBar'
 import GiftedListView from 'react-native-gifted-listview'
+import Conf from '../../Utils/Conf'
+import { loadStorage,saveStorage } from '../../LocalStorage'
 import { getConversationList } from '../../LeanCloud'
 
 export default class Record extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {};
-		var record = this;
-		//获取并缓存敲门记录
-		if (!global.recordData) {
-			getConversationList(global.loginState.username, 1, 20, (data) => {global.recordData = data});
-		}
 	}
 
 	render() {
@@ -39,30 +37,52 @@ export default class Record extends Component {
 	}
 
 	_onFetch(page = 1, callback, options) {
-		if (page === 5) {
+		if (page === 1 && !global.recordData) {
+			getConversationList(global.loginState.username,1,200,(data) => {
+                global.recordData = data;
+            }) 
+            var i = 1;
+            var t = setInterval(() => {
+            	console.log("com.menapp.getRecordTime",i);
+            	if(global.recordData){
+            		var recordData = formatRecordData();
+                	callback(recordData);
+                	clearInterval(t);
+            	}
+            	if (i++ === 10) {
+            		ToastAndroid.show('网络不畅,请稍后再试',Conf.toastTime);
+            		callback(null);
+                	clearInterval(t);
+            	}
+            },500)
+		}else if (page === 5) {
 			var rows = {}
 			callback(rows, {
 		  		allLoaded: true,
 			});
 		} else {
-			setTimeout(() => {
-				while (global.recordData) {
-					var pageSize = 5,
-						day,
-						offset = (page - 1) * pageSize,
-						data = [];
-					for (var i = 0; i < pageSize; i++) {
-						day = new Date(Date.now() - (offset+i) * 24 * 3600 * 1000).Format("yyyy年MM月dd日")
-						if (global.recordData[day]) {
-							data[day] = global.recordData[day];
-						}else {
-							data[day] = [{name:"今天没有人敲门",time:""},]
-						}
+			var recordData = formatRecordData();
+            callback(recordData);
+		}
+		function formatRecordData() {
+			var record = global.recordData;
+			if (record) {
+				var pageSize = 5,
+					day,
+					offset = (page - 1) * pageSize,
+					data = [];
+				for (var i = 0; i < pageSize; i++) {
+					day = new Date(Date.now() - (offset+i) * 24 * 3600 * 1000).Format("yyyy年MM月dd日")
+					if (record[day]) {
+						data[day] = record[day];
+					}else {
+						data[day] = [{name:"今天没有人敲门",time:""},]
 					}
-					callback(data);
-					break;
 				}
-			},500)
+				return data;
+			}else {
+				return null;
+			}
 		}
 		
 	}

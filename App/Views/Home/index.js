@@ -107,9 +107,9 @@ export default class HomeView extends Component {
 			    			 	activeOpacity = {0.5}
 			        			onPress={this._pageOnPress1.bind(this)}>
 					        	<View style={styles.textBox}>
-					        		<Text style={{fontSize:16,color:'#fff'}}>
+					        		{/*<Text style={{fontSize:16,color:'#fff'}}>
 					        			门铃号：{loginState.username}
-					        		</Text>
+					        		</Text>*/}
 					        		<Text style={{fontSize:20,color:'#fff'}}>
 					        			门铃二维码
 					        		</Text>

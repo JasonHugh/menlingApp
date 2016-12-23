@@ -22,7 +22,7 @@ const storage = new Storage({
   }
 });
 
-export function loadStorage(key,callback) {
+export function loadStorage(key,callback,notfound) {
 	storage.load({
 	    key: key,
 	    autoSync: false,
@@ -30,10 +30,12 @@ export function loadStorage(key,callback) {
 	  }).then(ret => {
 	  	callback(ret);
 	  }).catch(err => {
-	    //console.warn(err.message);
+	    console.warn(err.message);
 	    switch (err.name) {
 	        case 'NotFoundError':
-	            // TODO;
+	            if (notfound) {
+	            	notfound();
+	            }
 	            break;
 	        case 'ExpiredError':
 	            // TODO
