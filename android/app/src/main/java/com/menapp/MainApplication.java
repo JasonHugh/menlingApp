@@ -13,6 +13,8 @@ import com.facebook.react.shell.MainReactPackage;
 import java.util.Arrays;
 import java.util.List;
 import com.avos.avoscloud.AVOSCloud;
+import com.menapp.module.QQConnectPackage;
+import com.tencent.tauth.Tencent;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -34,7 +36,8 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-          new PushReactPackage()
+          new PushReactPackage(),
+          new QQConnectPackage()
       );
     }
   };

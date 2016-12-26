@@ -2,17 +2,34 @@ package com.menapp;
 
 import com.facebook.react.ReactActivity;
 import com.avos.avoscloud.*;
+
+import android.os.Handler;
+import android.os.Message;
+import android.text.TextUtils;
 import android.util.Log;
 import android.os.Bundle;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactRootView;
 import com.facebook.react.shell.MainReactPackage;
 import android.content.Intent;
+import android.widget.Toast;
+
 import com.menapp.service.RingService;
+import com.tencent.connect.UserInfo;
+import com.tencent.connect.common.Constants;
+import com.tencent.tauth.IUiListener;
+import com.tencent.tauth.Tencent;
+import com.tencent.tauth.UiError;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class MainActivity extends ReactActivity {
     private ReactInstanceManager mReactInstanceManager;
     private ReactRootView mReactRootView;
+	private Tencent mTencent;
+	private UserInfo mInfo;
+	private Toast mToast;
 
     /**
      * Returns the name of the main component registered from JavaScript.
@@ -26,15 +43,16 @@ public class MainActivity extends ReactActivity {
     @Override
   	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		//推送
 		PushService.setDefaultPushCallback(this, MainActivity.class);
 		AVInstallation.getCurrentInstallation().saveInBackground(new SaveCallback() {
 		    public void done(AVException e) {
 		        if (e == null) {
 		            // 保存成功
 		            String installationId = AVInstallation.getCurrentInstallation().getInstallationId();
-		            Log.i("push",installationId);
+		            Log.i("com.menapp.push",installationId);
 		        } else {
-		            Log.i("push","保存失败");
+		            Log.i("com.menapp.push","保存失败");
 		        }
 		    }
 		});
@@ -51,4 +69,5 @@ public class MainActivity extends ReactActivity {
         //	stopService(i);
 		//}
   	}
+
 }

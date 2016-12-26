@@ -8,11 +8,14 @@ import {
 	Alert,
 	Image,
 	Dimensions,
-	ToastAndroid
+	ToastAndroid,
+	TouchableOpacity
 } from 'react-native'
 import Conf from '../../Utils/Conf'
 import NavBar from '../../Components/NavBar'
 import { saveStorage } from '../../LocalStorage'
+import QQConnect from '../../NativeModule/QQConnect'
+import { DeviceEventEmitter } from 'react-native';
 
 export default class LoginView extends Component {
 	constructor(props) {
@@ -22,6 +25,12 @@ export default class LoginView extends Component {
 			password: "",
 		}
 	}
+	componentWillMount() {
+		DeviceEventEmitter.addListener('QQLoginSuccess', function(e: Event) {
+			ToastAndroid.show('登陆成功',1000);
+		});
+	}
+
 	render() {
 		return (
 			<Image source={require('../../assets/login_bg.jpg')} style={styles.container}
@@ -43,6 +52,11 @@ export default class LoginView extends Component {
 						underlineColorAndroid='transparent'
 						ref='inputPwd'
 					/>
+					<View style={styles.otherLogin}>
+						<TouchableOpacity activeOpacity={0.5} onPress={this._qqLogin.bind(this)}>
+	          				<Text style={styles.iconQQ}>&#xe616;</Text>
+	          			</TouchableOpacity>
+					</View>
 					<TouchableHighlight style={styles.sendBtn} underlayColor='#495a80' onPress={this._onPress.bind(this)}>
 		            	<Text style={styles.btnText}>
 		                	确认登陆
@@ -56,6 +70,10 @@ export default class LoginView extends Component {
 				</View>
 			</Image>
 		);
+	}
+
+	_qqLogin() {
+		QQConnect.login();
 	}
 
 	_onPress() {
@@ -156,7 +174,7 @@ const styles = StyleSheet.create({
 	    backgroundColor: '#51B2F9',
 	  	justifyContent: 'center',
 	  	alignItems: 'center',
-    	marginTop: 20,
+    	marginTop: 10,
     	borderWidth: 1,
     	borderColor: '#51B2F9',
     	borderRadius:25,
@@ -165,5 +183,17 @@ const styles = StyleSheet.create({
   	btnText: {
     	color: '#fff',
     	fontSize: 16,
+  	},
+  	otherLogin: {
+  		marginTop: 10,
+  		justifyContent:'center',
+  		alignItems: 'center',
+  		height: 50,
+  		flexDirection: 'row'
+  	},
+  	iconQQ: {
+  		fontFamily: 'iconfont',
+  		fontSize: 35,
+  		color: '#eee'
   	}
 })
