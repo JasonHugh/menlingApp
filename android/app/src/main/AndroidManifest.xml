@@ -24,7 +24,7 @@
       <activity
         android:name=".MainActivity"
         android:label="@string/app_name"
-        launcherMode="singleTask"
+          android:launchMode="singleTask"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
         android:screenOrientation="portrait">
         <intent-filter>
@@ -32,7 +32,7 @@
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
       </activity>
-      <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" launcherMode="singleTask" />
+      <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" android:launchMode="singleTask" />
       <activity
         android:name="com.tencent.tauth.AuthActivity"
         android:launchMode="singleTask"

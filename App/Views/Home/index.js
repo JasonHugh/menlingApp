@@ -79,7 +79,7 @@ export default class HomeView extends Component {
 		return (
 			<View style={styles.container}>
 				<NavBar/>
-		        <View style={{flex: 0,backgroundColor: '#E46D65',}}>
+		        {/*<View style={{flex: 0,backgroundColor: '#E46D65',}}>
 			        <TouchableWithoutFeedback
 			        	onPress={this._tabOnPress.bind(this)}>
 			        	<View style={styles.tabBar}>
@@ -88,7 +88,7 @@ export default class HomeView extends Component {
 			        		<Text style={{position:'absolute',right:30,top:4,color:'#fff'}}>新闻资讯</Text>
 			        	</View>
 			        </TouchableWithoutFeedback>
-			    </View>
+			    </View>*/}
 			    <ViewPagerAndroid style={styles.tabPageBox}
 			     	onPageSelected={this._tabOnPress.bind(this)}
 			    	ref='viewPage'>

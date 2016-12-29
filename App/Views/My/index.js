@@ -85,7 +85,7 @@ export default class MyView extends Component {
 				</TouchableOpacity>
 				<TouchableOpacity style={styles.rowBox} activeOpacity={0.5} onPress={this._onPress1.bind(this)} > 
 					<View style={styles.rowSubBox}>
-						<Text style={styles.rowBoxIcon}>&#xe69e;</Text>
+						<Text style={[styles.rowBoxIcon,{color:'#726dd1'}]}>&#xe69e;</Text>
 						<Text style={styles.rowBoxText}>修改密码</Text>
 						<Text style={styles.rowBoxArrow}>&#xe6a7;</Text>
 					</View>
@@ -99,7 +99,7 @@ export default class MyView extends Component {
 				</TouchableOpacity>*/}
 				<TouchableOpacity style={styles.rowBox} activeOpacity={0.5} onPress={this._onPress3.bind(this)} > 
 					<View style={styles.rowSubBox}>
-						<Text style={[styles.rowBoxIcon,{color:'#F4A5DE'}]}>&#xe62f;</Text>
+						<Text style={[styles.rowBoxIcon,{color:'#F4A5DE',fontSize:25}]}>&#xe62f;</Text>
 						<Text style={styles.rowBoxText}>退出登录</Text>
 						<Text style={styles.rowBoxArrow}>&#xe6a7;</Text>
 					</View>
@@ -196,7 +196,7 @@ var styles = {
 	rowBox: {
 		marginTop:10,
 		backgroundColor: '#fff',
-		height: 45,
+		height: 50,
 		
 	},
 	rowSubBox: {

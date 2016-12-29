@@ -36,6 +36,10 @@ export default class UserNameView extends Component {
 					<TextInput placeholder="请输入新用户名" style={{flex:1,marginRight:20}} 
 					onChangeText={(text) => this.setState({newUsername: text})} />
 				</View>
+				<View style={[styles.inputBox,{justifyContent:'center',flexDirection:'column'}]} >
+					<Text style={{fontSize:12,color:'#f00'}}>注意：用户名修改后需要重新生成门铃二维码</Text>
+					<Text style={{fontSize:12,color:'#f00'}}>而且已有的敲门记录会丢失</Text>
+				</View>
 				<View style={{alignItems:'center'}}>
 					<TouchableHighlight style={styles.sendBtn} underlayColor='#495a80' onPress={this._onPress.bind(this)}>
 		            	<Text style={styles.btnText}>
