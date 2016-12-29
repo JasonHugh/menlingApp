@@ -5,11 +5,15 @@ import com.avos.avoscloud.*;
 
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.os.Bundle;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactRootView;
+import com.facebook.react.bridge.ReactContext;
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.shell.MainReactPackage;
 import android.content.Intent;
 import android.widget.Toast;
@@ -68,6 +72,30 @@ public class MainActivity extends ReactActivity {
 		//	Intent i=new Intent(MainActivity.this,RingService.class);
         //	stopService(i);
 		//}
+
+		mTencent = Tencent.createInstance("1105866460", this.getApplicationContext());
   	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		IUiListener loginListener = new IUiListener() {
+			@Override
+			public void onComplete(Object o) {
+				System.out.println("qqlogin登录成功");
+			}
+
+			@Override
+			public void onError(UiError uiError) {
+				System.out.println("qqlogin登录失败");
+			}
+
+			@Override
+			public void onCancel() {
+				System.out.println("qqlogin登录取消");
+			}
+		};
+		mTencent.onActivityResultData(requestCode, resultCode, data,loginListener);
+		super.onActivityResult(requestCode, resultCode, data);
+	}
 
 }

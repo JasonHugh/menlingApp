@@ -9,13 +9,14 @@ import {
 	Image,
 	Dimensions,
 	ToastAndroid,
-	TouchableOpacity
+	TouchableOpacity,
+	DeviceEventEmitter
 } from 'react-native'
 import Conf from '../../Utils/Conf'
 import NavBar from '../../Components/NavBar'
 import { saveStorage } from '../../LocalStorage'
 import QQConnect from '../../NativeModule/QQConnect'
-import { DeviceEventEmitter } from 'react-native';
+import { qqLoginApi } from '../../LeanCloud'
 
 export default class LoginView extends Component {
 	constructor(props) {
@@ -25,10 +26,33 @@ export default class LoginView extends Component {
 			password: "",
 		}
 	}
-	componentWillMount() {
-		DeviceEventEmitter.addListener('QQLoginSuccess', function(e: Event) {
-			ToastAndroid.show('登陆成功',1000);
-		});
+
+	async componentDidMount() {
+		this.qqLoginEvent = DeviceEventEmitter.addListener('QQLoginSuccess',(data) => {
+	        //登陆到leancloud
+	        qqLoginApi({
+	        	'authData':{
+	        		'qq':{
+	        			'openid':data.openId,
+		        		'access_token':data.token,
+		        		'expires_in':data.expires
+	        		}
+	        	},
+	        	'nickname':data.nickname,
+	        	'headimg':data.headimg,
+	        	'gender':data.gender,
+	        	'province':data.province,
+	        	'city':data.city
+        	},(responseJson) => {
+        		//保存登陆状态
+        		this._saveUserToStorage(responseJson,data.nickname,data.headimg,data.gender);
+        	})
+        	
+	    })
+	}
+
+	componentWillUnmount() {
+	    this.qqLoginEvent.remove();
 	}
 
 	render() {
@@ -108,7 +132,7 @@ export default class LoginView extends Component {
 		}
 	}
 
-	async _saveUserToStorage(data) {
+	async _saveUserToStorage(data,nickname,headimg,gender) {
 		if (data.code) {
 			if (data.code == 202) {
 				ToastAndroid.show("用户名已存在！",Conf.toastTime);
@@ -116,17 +140,24 @@ export default class LoginView extends Component {
 				ToastAndroid.show(data.error,Conf.toastTime);
 			}
 		}else if (data.sessionToken && data.username) {
-			var sessionToken = data.sessionToken
-				,username = data.username
-				,objId = data.objectId;
-			saveStorage('loginState',{ 
-		      	sessionToken: sessionToken,
-		      	username: username,
-		      	objectId: objId
-			});
-			//console.log(JSON.stringify(data))
+			var saveData = { 
+			      	sessionToken: data.sessionToken,
+			      	username: data.username,
+			      	objectId: data.objectId,
+			      	nickname: data.nickname,
+			      	headimg: data.headimg,
+			      	gender: data.gender
+				}
+			if (nickname && headimg && gender) {
+				saveData.nickname = nickname;
+				saveData.headimg = headimg;
+				saveData.gender = gender;
+			}
+
 			//记录登陆状态
-			global.loginState = {sessionToken:sessionToken,username: username,objectId: objId};
+			saveStorage('loginState',saveData);
+			//console.log(JSON.stringify(data))
+			global.loginState = saveData;
 			//页面跳转
 			this.props.navigator.push({
 		  		id: 'contain'
@@ -188,12 +219,12 @@ const styles = StyleSheet.create({
   		marginTop: 10,
   		justifyContent:'center',
   		alignItems: 'center',
-  		height: 50,
-  		flexDirection: 'row'
+  		height: 55,
+  		flexDirection: 'row',
   	},
   	iconQQ: {
   		fontFamily: 'iconfont',
-  		fontSize: 35,
+  		fontSize: 40,
   		color: '#eee'
   	}
 })

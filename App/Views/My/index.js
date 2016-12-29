@@ -21,6 +21,16 @@ export default class MyView extends Component {
 			nowTime: 0
 	    };
 	    this.username = global.loginState.username;
+	    if (global.loginState.nickname) {
+	    	this.name = global.loginState.nickname;
+	    }else {
+	    	this.name = global.loginState.username;
+	    }
+	    if (global.loginState.headimg) {
+	    	this.headimg = {uri: global.loginState.headimg};
+	    }else {
+	    	this.headimg = require("../../assets/userhead.png");
+	    }
 
 	    //获取敲门记录数
 	    if (!global.recordData) {
@@ -53,8 +63,8 @@ export default class MyView extends Component {
 				<NavBar title="个人中心" />
 				<Image source={require("../../assets/my_top_bg.png")} style={styles.top}
 					resizeMode='cover' >
-					<Image source={require("../../assets/userhead.png")} style={styles.userhead} />
-					<Text style={styles.username}>{this.username}</Text>
+					<Image source={this.headimg} style={styles.userhead} resizeMode='cover'/>
+					<Text style={styles.username}>{this.name}</Text>
 				</Image>
 				<View style={styles.infoBox}>
 					<View style={styles.infoSubBox} >
@@ -66,6 +76,13 @@ export default class MyView extends Component {
 						<Text style={styles.infoText}>今日次数</Text>
 					</View>
 				</View>
+				<TouchableOpacity style={styles.rowBox} activeOpacity={0.5} onPress={this._onPress4.bind(this)} > 
+					<View style={styles.rowSubBox}>
+						<Text style={styles.rowBoxIcon}>&#xe6b8;</Text>
+						<Text style={styles.rowBoxText}>修改用户名</Text>
+						<Text style={styles.rowBoxArrow}>&#xe6a7;</Text>
+					</View>
+				</TouchableOpacity>
 				<TouchableOpacity style={styles.rowBox} activeOpacity={0.5} onPress={this._onPress1.bind(this)} > 
 					<View style={styles.rowSubBox}>
 						<Text style={styles.rowBoxIcon}>&#xe69e;</Text>
@@ -130,6 +147,10 @@ export default class MyView extends Component {
 	_onPress3() {
 		deleteStorage('loginState');
 	    this.props.navigator.resetTo({id:'login'})
+	}
+	
+	_onPress4() {
+	    this.props.navigator.push({id:'username'})
 	}
 }
 

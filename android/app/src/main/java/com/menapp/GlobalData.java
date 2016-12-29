@@ -7,4 +7,5 @@ public class GlobalData{
 	public static String customer = null;
 	//对话ID
 	public static String convId = null;
+
 }

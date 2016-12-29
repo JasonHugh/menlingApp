@@ -15,30 +15,26 @@ import { editUser } from '../../LeanCloud'
 import Conf from '../../Utils/Conf'
 import { deleteStorage } from '../../LocalStorage'
 
-export default class PasswordView extends Component {
+export default class UserNameView extends Component {
 	constructor(props) {
 		super(props);
+		this.username = global.loginState.username;
 		this.state = {
-			newPassword:"",
-			oldPassword:""
+			newUsername: ''
 		}
 	}
 
 	render() {
 		return (
 			<View style={{flex:1,backgroundColor:'#eee'}} >
-				<NavBar leftBtn={true} leftOnPress={() => {this.props.navigator.pop()}} title="修改密码"/>
-				{/*<View style={styles.inputBox} >
-					<Text style={styles.inputText}>旧密码：</Text>
-					<TextInput placeholder="请输入旧密码" style={{flex:1,marginRight:20}} 
-						onChangeText={(text) => this.setState({oldPassword: text})}
-						secureTextEntry={true}/>
-				</View>*/}
+				<NavBar leftBtn={true} leftOnPress={() => {this.props.navigator.pop()}} title="修改用户名"/>
 				<View style={styles.inputBox} >
-					<Text style={styles.inputText}>新密码：</Text>
-					<TextInput placeholder="请输入新密码" style={{flex:1,marginRight:20}}
-						onChangeText={(text) => this.setState({newPassword: text})}
-						secureTextEntry={true} />
+					<Text style={styles.inputText}>当前用户名：{this.username}</Text>
+				</View>
+				<View style={styles.inputBox} >
+					<Text style={styles.inputText}>新用户名：</Text>
+					<TextInput placeholder="请输入新用户名" style={{flex:1,marginRight:20}} 
+					onChangeText={(text) => this.setState({newUsername: text})} />
 				</View>
 				<View style={{alignItems:'center'}}>
 					<TouchableHighlight style={styles.sendBtn} underlayColor='#495a80' onPress={this._onPress.bind(this)}>
@@ -52,19 +48,24 @@ export default class PasswordView extends Component {
 	}
 
 	async _onPress() {
-		let newPassword = this.state.newPassword;
-		if (newPassword.trim() == "") {
-			ToastAndroid.show("密码不能为空",Conf.toastTime);
+		let newUsername = this.state.newUsername;
+		if (newUsername.trim() == "") {
+			ToastAndroid.show("用户名不能为空",Conf.toastTime);
 			return;
 		}
-		var res = await editUser({"password":newPassword});
+		var res = await editUser({'username':newUsername});
 		if (res.updatedAt) {
-			ToastAndroid.show("密码修改成功,请重新登陆",Conf.toastTime);
+			ToastAndroid.show("用户名修改成功,请重新登陆",Conf.toastTime);
 			//重新登陆
 			deleteStorage('loginState');
 	    	this.props.navigator.resetTo({id:'login'})
 		}else{
-			ToastAndroid.show(res.error,Conf.toastTime);
+			if (res.code == 202) {
+				ToastAndroid.show('用户名已存在！',Conf.toastTime);
+			}else {
+				ToastAndroid.show(res.error,Conf.toastTime);
+			}
+			
 		}
 	}
 }

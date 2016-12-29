@@ -127,9 +127,9 @@ export function createConversation(username,sendTo) {
 	})
 }
 
-export async function editPassword(old_password,new_password) {
+export async function editUser(data) {
 	try {
-      	let response = await fetch('https://api.leancloud.cn/1.1/users/'+global.loginState.objectId+'/updatePassword', {
+      	let response = await fetch('https://api.leancloud.cn/1.1/users/'+global.loginState.objectId, {
 		  	method: 'PUT',
 		  	headers: {
 		  	  	'Accept': 'application/json',
@@ -138,10 +138,7 @@ export async function editPassword(old_password,new_password) {
 			    'X-LC-Key': Conf.leanCloudKey,
 			    'X-LC-Session': global.loginState.sessionToken
 		  	},
-		  	body: JSON.stringify({
-		        "old_password": old_password,
-		        "new_password": new_password
-	      	})
+		  	body: JSON.stringify(data)
 	  	});
       	let responseJson = await response.json();
       	return responseJson;
@@ -149,6 +146,26 @@ export async function editPassword(old_password,new_password) {
       console.error(error);
     }
 }
+
+export async function qqLoginApi(authData,callback) {
+	try {
+      	let response = await fetch('https://api.leancloud.cn/1.1/users', {
+		  	method: 'POST',
+		  	headers: {
+		  	  	'Accept': 'application/json',
+		  	  	'Content-Type': 'application/json',
+			    'X-LC-Id': Conf.leanCloudId,
+			    'X-LC-Key': Conf.leanCloudKey
+		  	},
+		  	body: JSON.stringify(authData)
+	  	});
+      	let responseJson = await response.json();
+      	callback(responseJson);
+    } catch(error) {
+      console.error(error);
+    }
+} 
+
 
 Date.prototype.Format = function(fmt)   
 {

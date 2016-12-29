@@ -6,6 +6,8 @@ import {
     AppRegistry,
     StyleSheet,
     View,
+    DeviceEventEmitter,
+    ToastAndroid
 } from 'react-native'
 
 import NavigatorComp from './App/Components/Navigator'
