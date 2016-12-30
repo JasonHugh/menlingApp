@@ -107,10 +107,7 @@ android {
     }
     signingConfigs {
         release {
-            storeFile file("menling-release-key.keystore")
-            storePassword "458263"
-            keyAlias "menling"
-            keyPassword "458263"
+            
         }
     }
     buildTypes {

@@ -8,3 +8,5 @@
  2. 推送通知（LeanCloud）
  3. 新闻资讯列表（ReactNative--GiftedListView）
  4. 聊天功能（LeanCloud）
+ 5. 支持QQ登陆，用户名密码登陆
+ 6. 个人中心，修改信息

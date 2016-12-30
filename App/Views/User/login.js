@@ -98,16 +98,6 @@ export default class LoginView extends Component {
 
 	_qqLogin() {
 		QQConnect.login();
-		DeviceEventEmitter.emit('QQLoginSuccess', {
-			'nickname':'Arthur Hughes',
-        	'headimg':'http://q.qlogo.cn/qqapp/1105866460/6CE1CD59AFF203853141969EC4A759C4/100',
-        	'gender':'男',
-        	'province':'安徽',
-        	'city':'宣城',
-        	'openId':'6CE1CD59AFF203853141969EC4A759C4',
-    		'token':'C47561BC5F13ABDAF6817C3BF8CD6B98',
-    		'expires':7776000
-		});
 	}
 
 	_onPress() {
