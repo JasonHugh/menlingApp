@@ -147,6 +147,29 @@ export async function editUser(data) {
     }
 }
 
+//根据pid获取小区列表
+export async function getVillageList(pid) {
+	try {
+      	let response = await fetch('https://leancloud.cn:443/1.1/classes/Village', {
+		  	method: 'GET',
+		  	headers: {
+		  	  	'Accept': 'application/json',
+		  	  	'Content-Type': 'application/json',
+			    'X-LC-Id': Conf.leanCloudId,
+			    'X-LC-Key': Conf.leanCloudKey
+		  	},
+		  	body: {
+		  		where:{'pid':pid+''},
+		  		limit:50
+		  	}
+	  	});
+      	let responseJson = await response.json();
+      	callback(responseJson);
+    } catch(error) {
+      console.error(error);
+    }
+}
+
 export async function qqLoginApi(authData,callback) {
 	try {
       	let response = await fetch('https://api.leancloud.cn/1.1/users', {

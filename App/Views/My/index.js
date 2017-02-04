@@ -90,13 +90,13 @@ export default class MyView extends Component {
 						<Text style={styles.rowBoxArrow}>&#xe6a7;</Text>
 					</View>
 				</TouchableOpacity>
-				{/*<TouchableOpacity style={styles.rowBox} activeOpacity={0.5} onPress={this._onPress2.bind(this)} > 
+				<TouchableOpacity style={styles.rowBox} activeOpacity={0.5} onPress={this._onPress2.bind(this)} > 
 					<View style={styles.rowSubBox}>
 						<Text style={[styles.rowBoxIcon,{color:'#abb1f3'}]}>&#xe6ae;</Text>
 						<Text style={styles.rowBoxText}>设置你的小区</Text>
 						<Text style={styles.rowBoxArrow}>&#xe6a7;</Text>
 					</View>
-				</TouchableOpacity>*/}
+				</TouchableOpacity>
 				<TouchableOpacity style={styles.rowBox} activeOpacity={0.5} onPress={this._onPress3.bind(this)} > 
 					<View style={styles.rowSubBox}>
 						<Text style={[styles.rowBoxIcon,{color:'#F4A5DE',fontSize:25}]}>&#xe62f;</Text>
@@ -141,7 +141,7 @@ export default class MyView extends Component {
 	}
 
 	_onPress2() {
-	    this.props.navigator.push({id:'areaConf'})
+	    this.props.navigator.push({id:'areaconf'})
 	}
 
 	_onPress3() {

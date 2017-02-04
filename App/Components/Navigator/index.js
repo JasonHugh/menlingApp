@@ -17,9 +17,9 @@ import QRCodeView from '../../Views/QRCode'
 import RecordView from '../../Views/Record'
 import MyView from '../../Views/My'
 import ContainComp from '../../Components/Contain'
-import PasswordView from '../../Views/Password'
+import PasswordView from '../../Views/My/Password'
 import UserNameView from '../../Views/My/UserName'
-import AreaConfView from '../../Views/AreaConf'
+import AreaConfView from '../../Views/My/AreaConf'
 
 export default class NavigatorComp extends Component {
 	constructor(props) {
@@ -68,7 +68,7 @@ export default class NavigatorComp extends Component {
 			case 'contain': return(<ContainComp  navigator={navigator} route={route}/>);
 			case 'my': return(<MyView  navigator={navigator} route={route}/>);
 			case 'password': return(<PasswordView  navigator={navigator} route={route}/>);
-			case 'areaConf': return(<AreaConfView  navigator={navigator} route={route}/>);
+			case 'areaconf': return(<AreaConfView  navigator={navigator} route={route}/>);
 			case 'username': return(<UserNameView  navigator={navigator} route={route}/>);
 		}
 	}

@@ -10,6 +10,7 @@ import RecordView from '../../Views/Record'
 import ChatView from '../../Views/Chat' 
 import { login } from '../../LeanCloud'
 import MyView from '../../Views/My'
+import VillageView from '../../Views/Village'
 import { loadStorage } from '../../LocalStorage'
 
 export default class ContainComp extends Component {
@@ -61,6 +62,16 @@ export default class ContainComp extends Component {
                         <RecordView navigator={this.props.navigator} route={this.props.route}/>
                     </TabNavigator.Item>
                     <TabNavigator.Item
+                        selected={this.state.selectedTab === 'village'}
+                        title="社区"
+                        titleStyle={styles.tabText}
+                        selectedTitleStyle={styles.selectedTabText}
+                        renderIcon={() => <Text style={[styles.navIcon,styles.tabText]}>&#xe696;</Text>}
+                        renderSelectedIcon={() => <Text style={[styles.navIcon,styles.selectedTabText]}>&#xe696;</Text>}
+                        onPress={() => this.setState({ selectedTab: 'village' })}>
+                        <VillageView navigator={this.props.navigator} route={this.props.route}/>
+                    </TabNavigator.Item>
+                    <TabNavigator.Item
                         selected={this.state.selectedTab === 'my'}
                         title="我的"
                         titleStyle={styles.tabText}
@@ -90,7 +101,7 @@ var styles = {
 	navIcon: {
 		flex: 1, 
 		textAlign:'center',
-		fontSize: 20,
+		fontSize: 18,
 		fontFamily: 'iconfont'
 	},
 	tabText: {
